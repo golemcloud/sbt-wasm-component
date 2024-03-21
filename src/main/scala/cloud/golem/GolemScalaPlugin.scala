@@ -4,6 +4,7 @@ import sbt.*
 import sbt.Keys.*
 import org.scalajs.sbtplugin.ScalaJSPlugin
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport.*
+import sbt.plugins.JvmPlugin
 
 object GolemScalaPlugin extends AutoPlugin {
   private object Versions {
@@ -13,11 +14,11 @@ object GolemScalaPlugin extends AutoPlugin {
 
   override def trigger: PluginTrigger = allRequirements
 
-  override def requires: Plugins = ScalaJSPlugin
+  override def requires: Plugins = JvmPlugin && ScalaJSPlugin
 
   override lazy val projectSettings: Seq[Setting[?]] = Seq(
     scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
-    libraryDependencies += "cloud.golem" %% "golem-scala-macros" % Versions.macros,
+    libraryDependencies += "cloud.golem" %% "golem-scala-macros" % Versions.macros
   ) ++ macroParadiseSettings
 
   private lazy val macroParadiseSettings = Seq(
