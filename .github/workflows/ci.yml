@@ -27,4 +27,4 @@ jobs:
       - name: Build and test
         shell: bash
         run: |
-          sbt -v clean compile
+          sbt -v clean +publishLocal scripted
