@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - java: 8
+          - java: 21
+          - java: 22-ea
+          - java: 17
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "${{ matrix.java }}"
+          cache: sbt
+      - name: Build and test
+        shell: bash
+        run: |
+          sbt -v clean compile
