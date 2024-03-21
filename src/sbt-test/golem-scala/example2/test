@@ -1,0 +1,12 @@
+> +clean
+> +fullLinkJS
+$ exists target/scala-2.12/root-opt/main.js
+$ exists target/scala-2.12/root-opt/main.js.map
+$ exists target/scala-2.13/root-opt/main.js
+$ exists target/scala-2.13/root-opt/main.js.map
+> +clean
+> +fastLinkJS
+$ exists target/scala-2.12/root-fastopt/main.js
+$ exists target/scala-2.12/root-fastopt/main.js.map
+$ exists target/scala-2.13/root-fastopt/main.js
+$ exists target/scala-2.13/root-fastopt/main.js.map
