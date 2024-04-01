@@ -11,11 +11,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
+        include: # Test against all LTS + latest
           - java: 8
+          - java: 11
+          - java: 17
           - java: 21
           - java: 22-ea
-          - java: 17
     steps:
       - uses: actions/checkout@v4
       - name: Setup JDK ${{ matrix.java }}
@@ -27,4 +28,4 @@ jobs:
       - name: Build and test
         shell: bash
         run: |
-          sbt -v clean compile
+          sbt -v clean +publishLocal scripted
