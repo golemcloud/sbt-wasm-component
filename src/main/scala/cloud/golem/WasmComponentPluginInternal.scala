@@ -1,5 +1,6 @@
 package cloud.golem
 
+import buildinfo.BuildInfo
 import sbt.*
 import sbt.Keys.*
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport.*
@@ -79,7 +80,7 @@ private[golem] object WasmComponentPluginInternal {
       scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
       Compile / fullLinkJS / scalaJSLinkerOutputDirectory := wasmComponentOutputDirectory.value,
       Compile / fastLinkJS / scalaJSLinkerOutputDirectory := wasmComponentOutputDirectory.value,
-      libraryDependencies += "cloud.golem" %% "sbt-wasm-component-macros" % version.value
+      libraryDependencies += "cloud.golem" %% "sbt-wasm-component-macros" % BuildInfo.version
     )
 
   lazy val macroParadiseSettings: Seq[Setting[?]] = Def.settings(
