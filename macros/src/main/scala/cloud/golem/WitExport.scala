@@ -5,11 +5,11 @@ import scala.language.experimental.macros
 import scala.reflect.macros.whitebox
 
 @compileTimeOnly("Enable macro paradise to expand macro annotations")
-final class Worker extends StaticAnnotation {
-  def macroTransform(annottees: Any*): Any = macro WorkerExport.impl
+final class WitExport extends StaticAnnotation {
+  def macroTransform(annottees: Any*): Any = macro WitExportMacro.impl
 }
 
-object WorkerExport {
+object WitExportMacro {
   def impl(c: whitebox.Context)(annottees: c.Expr[Any]*): c.Expr[Any] = {
     import c.universe._
 

@@ -1,6 +1,6 @@
 package example
 
-@cloud.golem.Worker
+@cloud.golem.WitExport
 object ShoppingCart extends Api { self =>
 
   def initializeCart(userId: String): WitResult[String, String] = {
