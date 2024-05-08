@@ -1,6 +1,6 @@
 package example
 
-@cloud.golem.Worker
+@cloud.golem.WitExport
 object ShoppingCart { self =>
 
   def initializeCart(userId: String): String = {
