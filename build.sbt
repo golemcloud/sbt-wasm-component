@@ -10,6 +10,7 @@ lazy val root = (project in file("."))
   )
   .settings(scriptedLaunchOpts += s"-Dplugin.version=${version.value}")
   .enablePlugins(SbtPlugin)
+  .publishSettings
   .dependsOn(macros)
   .aggregate(macros)
 
