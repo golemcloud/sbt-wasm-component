@@ -32,10 +32,19 @@ private[golem] object WasmComponentPluginInternal {
           val wasmComponentWitBindgenOutput = (Compile / sourceManaged).value / "scala" / wasmComponentPackageName.value / "Api.scala"
           import scala.sys.process.*
 
+          val bindGenCommand = "golem-scalajs-wit-bindgen"
+          val bindgenCommandExists = Seq("bash", "-xc", s"which $bindGenCommand").! == 0
+          if (!bindgenCommandExists) {
+            sys.error(s"""
+            |$bindGenCommand not found. Run `cargo install $bindGenCommand`.
+            |https://learn.golem.cloud/docs/building-components/tier-1/scala
+            """.stripMargin)
+          }
+
           val output = Seq(
             "bash",
             "-xc",
-            s"golem-scalajs-wit-bindgen -w ${wasmComponentWitFullPath.value} -p ${wasmComponentPackageName.value}"
+            s"$bindGenCommand -w ${wasmComponentWitFullPath.value} -p ${wasmComponentPackageName.value}"
           ).!!
 
           IO.write(wasmComponentWitBindgenOutput, output)
