@@ -4,22 +4,15 @@ import sbt.*
 import sbt.Keys.*
 import org.scalajs.sbtplugin.ScalaJSPlugin
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport.*
-import sbt.KeyRanks.BSetting
 import sbt.plugins.JvmPlugin
 
 object GolemScalaPlugin extends AutoPlugin {
   private object Versions {
     val macros = "0.1.0"
+    val scalaMacrosParadise = "2.1.1"
   }
 
   object autoImport {
-    val outputDirectory =
-      SettingKey[File](
-        "outputDirectory",
-        "Directory for linker output",
-        BSetting
-      )
-
     val witBindgen =
       taskKey[Unit]("Runs golem-scalajs-wit-bindgen to generate WIT bindings")
 
@@ -28,7 +21,6 @@ object GolemScalaPlugin extends AutoPlugin {
 
     lazy val baseSettings: Seq[Setting[?]] =
       Def.settings(
-        scalacOptions := Seq("-Ymacro-annotations"),
         witBindgen := {
           import scala.sys.process.*
           Seq(
@@ -54,7 +46,22 @@ object GolemScalaPlugin extends AutoPlugin {
 
   override lazy val projectSettings: Seq[Setting[?]] = baseSettings ++ Seq(
     scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
-    Compile / fullLinkJS / scalaJSLinkerOutputDirectory := outputDirectory.value,
     libraryDependencies += "cloud.golem" %% "golem-scala-macros" % Versions.macros
+  ) ++ macroParadiseSettings
+
+  private lazy val macroParadiseSettings = Seq(
+    scalacOptions ++= {
+      if (scalaVersion.value.startsWith("2.13")) Seq("-Ymacro-annotations")
+      else Nil
+    },
+    libraryDependencies ++= {
+      if (scalaVersion.value.startsWith("2.12")) {
+        Seq(
+          compilerPlugin(
+            "org.scalamacros" % "paradise" % Versions.scalaMacrosParadise cross CrossVersion.full
+          )
+        )
+      } else Nil
+    }
   )
 }
