@@ -13,15 +13,14 @@ private[golem] object WasmComponentPluginInternal {
   }
 
   lazy val baseSettings: Seq[Setting[?]] = {
-    lazy val wasmComponentWitFullPath =
-      Def
-        .task(
-          wasmComponentWitPath.value / s"${wasmComponentPackageName.value}.wit"
-        )
+    lazy val wasmComponentWitFullPath = Def.task(
+      wasmComponentWitPath.value / s"${wasmComponentWitName.value}.wit"
+    )
     Def.settings(
       wasmComponentOutputDirectory := target.value / "dist",
       wasmComponentWitPath := (ThisBuild / baseDirectory).value / "wit",
       wasmComponentPackageName := moduleName.value,
+      wasmComponentWitName := wasmComponentPackageName.value,
       wasmComponentWitBindgen := {
         if (!wasmComponentWitFullPath.value.exists()) {
           sys.error(s"""

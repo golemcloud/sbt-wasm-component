@@ -13,7 +13,12 @@ object WasmComponentPlugin extends AutoPlugin {
     )
     lazy val wasmComponentWitPath = SettingKey[File](
       "wasmComponentWitPath",
-      "Path to the wit file",
+      "Path to the WIT directory",
+      KeyRanks.Invisible
+    )
+    lazy val wasmComponentWitName = SettingKey[String](
+      "wasmComponentWitName",
+      "WIT filename without extension",
       KeyRanks.Invisible
     )
     lazy val wasmComponentPackageName = SettingKey[String](
