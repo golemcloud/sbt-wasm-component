@@ -8,7 +8,6 @@ private[golem] object WasmComponentPluginInternal {
   import WasmComponentPlugin.autoImport.*
 
   private object Versions {
-    val macros = "0.1.0"
     val scalaMacrosParadise = "2.1.1"
   }
 
@@ -32,7 +31,11 @@ private[golem] object WasmComponentPluginInternal {
           import scala.sys.process.*
 
           val bindGenCommand = "golem-scalajs-wit-bindgen"
-          val bindgenCommandExists = Seq("bash", "-xc", s"which $bindGenCommand").! == 0
+          val bindgenCommandExists = Seq(
+            "bash",
+            "-xc",
+            s"which $bindGenCommand"
+          ).! == 0
           if (!bindgenCommandExists) {
             sys.error(s"""
             |$bindGenCommand not found. Run `cargo install $bindGenCommand`.
@@ -76,7 +79,7 @@ private[golem] object WasmComponentPluginInternal {
       scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
       Compile / fullLinkJS / scalaJSLinkerOutputDirectory := wasmComponentOutputDirectory.value,
       Compile / fastLinkJS / scalaJSLinkerOutputDirectory := wasmComponentOutputDirectory.value,
-      libraryDependencies += "cloud.golem" %% "sbt-wasm-component-macros" % Versions.macros
+      libraryDependencies += "cloud.golem" %% "sbt-wasm-component-macros" % version.value
     )
 
   lazy val macroParadiseSettings: Seq[Setting[?]] = Def.settings(
