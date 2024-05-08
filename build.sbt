@@ -5,7 +5,7 @@ ThisBuild / organization := "cloud.golem"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "golem-scala",
+    name := "sbt-wasm-component",
     addSbtPlugin("org.scala-js" % "sbt-scalajs" % Versions.scalaJS)
   )
   .settings(scriptedLaunchOpts += s"-Dplugin.version=${version.value}")
@@ -15,7 +15,7 @@ lazy val root = (project in file("."))
 
 lazy val macros = project
   .settings(
-    name := "golem-scala-macros",
+    name := "sbt-wasm-component-macros",
     crossScalaVersions += Versions.scala2_13,
     libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
   )
