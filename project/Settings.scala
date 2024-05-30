@@ -7,6 +7,9 @@ object Settings {
 
     def publishSettings: sbt.Project = {
       import com.jsuereth.sbtpgp.PgpKeys.*
+      import xerial.sbt.Sonatype
+      import xerial.sbt.Sonatype.SonatypeKeys.*
+
 
       project.settings(
         inThisBuild(
@@ -23,16 +26,13 @@ object Settings {
                 "danieletorelli",
                 "Daniele Torelli",
                 "daniele.torelli@ziverge.com",
-                url("https://mdtorelli.it")
+                url("https://github.com/danieletorelli")
               )
             ),
-            resolvers +=
-              "Sonatype OSS Snapshots 01" at "https://s01.oss.sonatype.org/content/repositories/snapshots",
-            pgpPassphrase := sys.env.get("PGP_PASSWORD").map(_.toArray),
+            pgpPassphrase := sys.env.get("PGP_PASSPHRASE").map(_.toArray),
             pgpPublicRing := file("/tmp/public.asc"),
             pgpSecretRing := file("/tmp/secret.asc"),
-            resolvers +=
-              "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+            sonatypeCredentialHost := Sonatype.sonatype01
           )
         )
       )
