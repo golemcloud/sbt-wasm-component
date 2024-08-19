@@ -2,11 +2,7 @@
 > +fullLinkJS
 $ exists target/dist/main.js
 $ exists target/dist/main.js.map
-$ exists target/dist/main.js
-$ exists target/dist/main.js.map
 > +clean
 > +fastLinkJS
-$ exists target/dist/main.js
-$ exists target/dist/main.js.map
 $ exists target/dist/main.js
 $ exists target/dist/main.js.map
