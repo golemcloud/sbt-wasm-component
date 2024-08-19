@@ -18,7 +18,7 @@ private[golem] object WasmComponentPluginInternal {
     )
     def checkCommandOrFail(command: String)(error: => String): Unit = {
       import scala.sys.process.*
-      val commandExists = Seq("bash", "-xc", s"which $command").! == 0
+      val commandExists = Seq("sh", "-xc", s"which $command").! == 0
       if (!commandExists) sys.error(error)
     }
     Def.settings(
@@ -46,7 +46,7 @@ private[golem] object WasmComponentPluginInternal {
             """.stripMargin
           }
           val output = Seq(
-            "bash",
+            "sh",
             "-xc",
             s"$bindGenCommand -w ${wasmComponentWitFullPath.value} -p ${wasmComponentPackageName.value}"
           ).!!
@@ -66,8 +66,8 @@ private[golem] object WasmComponentPluginInternal {
           """.stripMargin
         }
 
-        Seq("bash", "-xc", s"$npmCommand install").!!
-        Seq("bash", "-xc", s"$npmCommand run build").!!
+        Seq("sh", "-xc", s"$npmCommand install").!!
+        Seq("sh", "-xc", s"$npmCommand run build").!!
       },
       wasmComponent := (wasmComponent dependsOn (Compile / fullLinkJS)).value,
       Compile / sourceGenerators += Def.taskIf {

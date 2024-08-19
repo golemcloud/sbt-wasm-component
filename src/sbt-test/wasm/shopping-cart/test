@@ -1,0 +1,6 @@
+> +clean
+$ exec cargo install golem-scalajs-wit-bindgen
+> +wasmComponent
+$ exists target/dist/main.js
+$ exists target/dist/main.js.map
+$ exists target/dist/main.wasm

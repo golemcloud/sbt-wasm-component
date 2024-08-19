@@ -10,7 +10,6 @@ object Settings {
       import xerial.sbt.Sonatype
       import xerial.sbt.Sonatype.SonatypeKeys.*
 
-
       project.settings(
         inThisBuild(
           List(
