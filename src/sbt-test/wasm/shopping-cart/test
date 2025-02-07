@@ -1,5 +1,7 @@
 > +clean
-$ exec cargo install golem-scalajs-wit-bindgen
+# $ exec cargo install golem-scalajs-wit-bindgen
+> +wasmComponentRegenerateSkeleton
+# $ pause
 > +wasmComponent
 $ exists target/dist/main.js
 $ exists target/dist/main.js.map

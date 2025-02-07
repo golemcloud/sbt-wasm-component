@@ -28,8 +28,10 @@ object WasmComponentPlugin extends AutoPlugin {
     )
     lazy val wasmComponentWitBindgen =
       taskKey[Seq[File]](
-        "Runs golem-scalajs-wit-bindgen to generate WIT bindings"
+        "Runs wit-bindgen to generate Scala.js bindings from the WIT specification"
       )
+    lazy val wasmComponentRegenerateSkeleton =
+      taskKey[Unit]("Regenerates the skeleton Scala.js files in the source directory based on the WIT specification. This will revert any user changes in these files.")
     lazy val wasmComponent =
       taskKey[Unit]("Runs componentize-js on the generated ScalaJS file")
   }
@@ -40,6 +42,5 @@ object WasmComponentPlugin extends AutoPlugin {
 
   override lazy val projectSettings: Seq[Setting[?]] =
     WasmComponentPluginInternal.baseSettings ++
-      WasmComponentPluginInternal.scalaJsSettings ++
-      WasmComponentPluginInternal.macroParadiseSettings
+      WasmComponentPluginInternal.scalaJsSettings
 }
