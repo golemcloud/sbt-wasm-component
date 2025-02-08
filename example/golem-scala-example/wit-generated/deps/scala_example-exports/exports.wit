@@ -1,0 +1,14 @@
+package scala:example-exports;
+
+interface api {
+  resource counter {
+    constructor(name: string);
+    increment: func(delta: s32);
+    get: func() -> s32;
+    name: func() -> string;
+    get-all: static func() -> list<tuple<string, s32>>;
+  }
+  get-counters: func() -> list<counter>;
+}
+
+interface example-inline-functions {}

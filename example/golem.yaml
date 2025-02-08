@@ -1,0 +1,27 @@
+# Schema for IDEA:
+# $schema: https://schema.golem.cloud/app/golem/1.1.1/golem.schema.json
+# Schema for vscode-yaml
+# yaml-language-server: $schema=https://schema.golem.cloud/app/golem/1.1.1/golem.schema.json
+
+tempDir: target/golem-temp
+witDeps:
+  - common-wit/deps
+templates:
+  scala:
+    sourceWit: wit
+    generatedWit: wit-generated
+    componentWasm: target/dist/main.wasm
+    linkedWasm: ../target/{{ componentName }}-linked.wasm
+    build:
+      - command: sbt wasmComponent
+        sources:
+          - wit-generated
+    clean:
+      - target
+      - wit-generated
+    customCommands:
+      update-deps:
+        - command: wit-deps -d common-wit/deps -m common-wit/deps.toml -l common-wit/deps.lock update
+          dir: ..
+      regenerate-skeleton:
+        - command: sbt wasmComponentRegenerateSkeleton

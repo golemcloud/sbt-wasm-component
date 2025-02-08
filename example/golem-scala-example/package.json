@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "build": "jco componentize -w wit-generated -o target/dist/main.wasm target/dist/main.js",
+    "componentize": "npm run build"
+  },
+  "devDependencies": {
+    "@golemcloud/componentize-js": "0.10.5-golem.3",
+    "@golemcloud/jco": "1.4.4-golem.1"
+  }
+}

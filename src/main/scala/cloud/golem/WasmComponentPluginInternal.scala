@@ -9,9 +9,6 @@ private[golem] object WasmComponentPluginInternal {
   import WasmComponentPlugin.autoImport.*
 
   lazy val baseSettings: Seq[Setting[?]] = {
-    lazy val wasmComponentWitFullPath = Def.task(
-      wasmComponentWitPath.value / s"${wasmComponentWitName.value}.wit"
-    )
 
     def checkCommandOrFail(command: String)(error: => String): Unit = {
       import scala.sys.process.*
@@ -25,10 +22,10 @@ private[golem] object WasmComponentPluginInternal {
       wasmComponentPackageName := moduleName.value,
       wasmComponentWitName := wasmComponentPackageName.value,
       wasmComponentWitBindgen := {
-        if (!wasmComponentWitFullPath.value.exists()) {
+        if (!wasmComponentWitPath.value.exists()) {
           sys.error(
             s"""
-               |'${wasmComponentWitFullPath.value.getAbsolutePath}' does not exist.
+               |'${wasmComponentWitPath.value.getAbsolutePath}' does not exist.
                |Make sure 'wasmComponentPackageName' is set correctly in your build.sbt
          """.stripMargin)
         } else {
@@ -50,7 +47,7 @@ private[golem] object WasmComponentPluginInternal {
           Seq(
             "sh",
             "-xc",
-            s"$bindGenCommand scala-js ${wasmComponentWitFullPath.value} " +
+            s"$bindGenCommand scala-js ${wasmComponentWitPath.value} " +
               s"--out-dir $bindgenOutput " +
               s"--base-package '${wasmComponentPackageName.value}.bindings' " +
               s"--scala-dialect $scalaDialect"
@@ -60,10 +57,10 @@ private[golem] object WasmComponentPluginInternal {
         }
       },
       wasmComponentRegenerateSkeleton := {
-        if (!wasmComponentWitFullPath.value.exists()) {
+        if (!wasmComponentWitPath.value.exists()) {
           sys.error(
             s"""
-               |'${wasmComponentWitFullPath.value.getAbsolutePath}' does not exist.
+               |'${wasmComponentWitPath.value.getAbsolutePath}' does not exist.
                |Make sure 'wasmComponentPackageName' is set correctly in your build.sbt
          """.stripMargin)
         } else {
@@ -91,7 +88,7 @@ private[golem] object WasmComponentPluginInternal {
           Seq(
             "sh",
             "-xc",
-            s"$bindGenCommand scala-js ${wasmComponentWitFullPath.value} " +
+            s"$bindGenCommand scala-js ${wasmComponentWitPath.value} " +
               s"--out-dir $base " +
               s"--base-package '${wasmComponentPackageName.value}.bindings' " +
               s"--generate-skeleton " +
@@ -119,12 +116,12 @@ private[golem] object WasmComponentPluginInternal {
       },
       wasmComponent := (wasmComponent dependsOn (Compile / fullLinkJS)).value,
       Compile / sourceGenerators += Def.taskIf {
-        if (wasmComponentWitFullPath.value.exists())
+        if (wasmComponentWitPath.value.exists())
           wasmComponentWitBindgen.value
         else {
           println(
             s"""
-               |'${wasmComponentWitFullPath.value.getAbsolutePath}' does not exist.
+               |'${wasmComponentWitPath.value.getAbsolutePath}' does not exist.
                |Make sure 'wasmComponentPackageName' is set correctly in your build.sbt""".stripMargin
           )
           Nil
