@@ -45,3 +45,6 @@ build/
 
 ### Scala ###
 .bsp/
+
+node_modules/
+**/wit-generated/
