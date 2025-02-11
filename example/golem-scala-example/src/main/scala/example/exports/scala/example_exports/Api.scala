@@ -2,9 +2,11 @@ package example.exports.scala.example_exports
 
 import scala.scalajs.js
 import scala.scalajs.js.annotation.*
+import scala.scalajs.js.JSConverters._
 import example.bindings.wit.*
 
 import java.nio.charset.StandardCharsets
+import scala.scalajs.js.typedarray.Uint8Array
 
 object GlobalState {
   val counters: scala.collection.mutable.Set[Counter] = scala.collection.mutable.Set()
@@ -49,7 +51,7 @@ object Counter extends example.bindings.exports.scala.example_exports.api.Counte
     println(s"Counter $name reached value $value, publishing via http...")
 
     val headers = new Fields()
-    headers.append("Content-Type", WitList.fromList("application/json".getBytes(StandardCharsets.UTF_8).toList))
+    headers.append("Content-Type", Uint8Array("application/json".getBytes(StandardCharsets.UTF_8).map(_.toShort).toJSArray))
     val request = new OutgoingRequest(headers)
 
     val result = for {
@@ -59,7 +61,7 @@ object Counter extends example.bindings.exports.scala.example_exports.api.Counte
       _ <- request.setPathWithQuery(Nullable.some("/counter")).toEither
       body <- request.body().toEither
       stream <- body.write().toEither
-      _ <- stream.write(WitList.fromList(s"""{"name": "$name", "value": $value}""".getBytes(StandardCharsets.UTF_8).toList)).toEither
+      _ <- stream.write(Uint8Array(s"""{"name": "$name", "value": $value}""".getBytes(StandardCharsets.UTF_8).map(_.toShort).toJSArray)).toEither
       futureResponse <- OutgoingHandler.handle(request, Nullable.none).toEither
       pollable = futureResponse.subscribe()
       _ = pollable.block()
@@ -70,14 +72,14 @@ object Counter extends example.bindings.exports.scala.example_exports.api.Counte
       incomingBody <- response2.consume().toEither
       incomingStream <- incomingBody.stream().toEither
       incomingData <- incomingStream.read(1024).toEither
-      incomingString = new String(incomingData.toArray, StandardCharsets.UTF_8)
+      incomingString = new String(incomingData.map(_.toByte).toArray, StandardCharsets.UTF_8)
     } yield (status, incomingString)
 
-    result match
+    result match {
       case Left(failure) => println(s"Failed to send counter value: $failure")
       case Right((status, response)) => println(s"Successfully sent counter value - status: $status, response: $response")
+    }
   }
-}
 
 
 @JSExportTopLevel("api")
