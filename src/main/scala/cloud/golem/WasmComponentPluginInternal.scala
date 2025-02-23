@@ -35,7 +35,7 @@ private[golem] object WasmComponentPluginInternal {
           val scalaDialect = if (version.startsWith("3.")) "scala3" else "scala2"
 
           import scala.sys.process.*
-          val bindGenCommand = "/home/vigoo/projects/wit-bindgen-scalajs/target/debug/wit-bindgen-scalajs" // TODO: replace to wit-bindgen-scalajs
+          val bindGenCommand = "wit-bindgen-scalajs"
           checkCommandOrFail(bindGenCommand) {
             s"""
                |$bindGenCommand not found.
@@ -76,7 +76,7 @@ private[golem] object WasmComponentPluginInternal {
 
           import scala.sys.process.*
 
-          val bindGenCommand = "/home/vigoo/projects/wit-bindgen-scalajs/target/debug/wit-bindgen-scalajs" // TODO: replace to wit-bindgen-scalajs
+          val bindGenCommand = "wit-bindgen-scalajs"
           checkCommandOrFail(bindGenCommand) {
             s"""
                |$bindGenCommand not found.

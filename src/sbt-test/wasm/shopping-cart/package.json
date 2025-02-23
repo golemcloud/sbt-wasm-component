@@ -1,10 +1,10 @@
 {
   "scripts": {
-    "build": "jco componentize -w wit -o target/dist/main.wasm target/dist/main.js",
+    "build": "jco componentize --bind-functions-to-interface --expect-top-level-resource-classes --wit wit-generated --out target/dist/main.wasm target/dist/main.js",
     "componentize": "npm run build"
   },
   "devDependencies": {
-    "@bytecodealliance/componentize-js": "0.10.2",
-    "@bytecodealliance/jco": "1.4.0"
+    "@golemcloud/componentize-js": "file:/Users/vigoo/projects/ziverge/ComponentizeJS",
+    "@golemcloud/jco": "file:/Users/vigoo/projects/ziverge/jco"
   }
 }

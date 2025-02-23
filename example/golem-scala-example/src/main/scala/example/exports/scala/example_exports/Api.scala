@@ -12,6 +12,7 @@ object GlobalState {
   val counters: scala.collection.mutable.Set[Counter] = scala.collection.mutable.Set()
 }
 
+@JSExportTopLevel("api_Counter")
 class Counter(name0: String) extends example.bindings.exports.scala.example_exports.api.Counter(name0) {
   GlobalState.counters.add(this)
 
@@ -54,48 +55,43 @@ object Counter extends example.bindings.exports.scala.example_exports.api.Counte
     headers.append("Content-Type", Uint8Array("application/json".getBytes(StandardCharsets.UTF_8).map(_.toShort).toJSArray))
     val request = new OutgoingRequest(headers)
 
-    val result = for {
-      _ <- request.setMethod(Method.post()).toEither
-      _ <- request.setScheme(Nullable.some(Scheme.http())).toEither
-      _ <- request.setAuthority(Nullable.some("localhost:8888")).toEither
-      _ <- request.setPathWithQuery(Nullable.some("/counter")).toEither
-      body <- request.body().toEither
-      stream <- body.write().toEither
-      _ <- stream.write(Uint8Array(s"""{"name": "$name", "value": $value}""".getBytes(StandardCharsets.UTF_8).map(_.toShort).toJSArray)).toEither
-      futureResponse <- OutgoingHandler.handle(request, Nullable.none).toEither
-      pollable = futureResponse.subscribe()
-      _ = pollable.block()
-      response0 <- futureResponse.get().toOption.toRight("Failed to get response")
-      response1 <- response0.toEither
-      response2 <- response1.toEither
-      status = response2.status()
-      incomingBody <- response2.consume().toEither
-      incomingStream <- incomingBody.stream().toEither
-      incomingData <- incomingStream.read(1024).toEither
-      incomingString = new String(incomingData.map(_.toByte).toArray, StandardCharsets.UTF_8)
-    } yield (status, incomingString)
+    request.setMethod(Method.post())
+
+    request.setScheme(Nullable.some(Scheme.http()))
+    request.setAuthority(Nullable.some("localhost:8888"))
+    request.setPathWithQuery(Nullable.some("/counter"))
+    val body = request.body()
+    val stream = body.write()
+    stream.write(Uint8Array(s"""{"name": "$name", "value": $value}""".getBytes(StandardCharsets.UTF_8).map(_.toShort).toJSArray))
+    val futureResponse = OutgoingHandler.handle(request, Nullable.none)
+    val pollable = futureResponse.subscribe()
+    pollable.block()
+
+    val result =
+      for {
+        response0 <- futureResponse.get().toOption.toRight("Failed to get response")
+        response1 <- response0.toEither
+        response2 <- response1.toEither
+        status = response2.status()
+        incomingBody = response2.consume()
+        incomingStream = incomingBody.stream()
+        incomingData = incomingStream.read(1024)
+        incomingString = new String(incomingData.map(_.toByte).toArray, StandardCharsets.UTF_8)
+      } yield (status, incomingString)
 
     result match {
-      case Left(failure) => println(s"Failed to send counter value: $failure")
-      case Right((status, response)) => println(s"Successfully sent counter value - status: $status, response: $response")
+      case Left(error) =>
+        println(s"Failed to send counter value - error: $error")
+      case Right((status, response)) =>
+        println(s"Successfully sent counter value - status: $status, response: $response")
     }
   }
-
+}
 
 @JSExportTopLevel("api")
 object Api extends example.bindings.exports.scala.example_exports.api.Api {
   @JSExport("getCounters")
-  override def getCounters(): WitList[example.bindings.exports.scala.example_exports.api.Counter] = {
-    WitList.fromList(GlobalState.counters.toList)
-  }
-
-  @JSExport("Counter")
-  def counter(name0: String): example.bindings.exports.scala.example_exports.api.Counter =
-    new Counter(name0)
-
-  @JSExport("hello")
-  override def hello(): String = {
-    Counter.sendValue("hello", 42)
-    "hello world"
+  override def getCounters(): WitList[WitTuple2[String, Int]] = {
+    Counter.getAll()
   }
 }
