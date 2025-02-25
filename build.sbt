@@ -12,13 +12,3 @@ lazy val root = (project in file("."))
   .enablePlugins(SbtPlugin)
   .enablePlugins(BuildInfoPlugin)
   .publishSettings
-  .dependsOn(macros)
-  .aggregate(macros)
-
-lazy val macros = project
-  .settings(
-    name := "sbt-wasm-component-macros",
-    crossScalaVersions += Versions.scala2_13,
-    libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-  )
-  .macroParadiseSettings

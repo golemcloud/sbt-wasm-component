@@ -1,0 +1,30 @@
+package scala:example;
+
+interface api {
+    resource counter {
+        constructor(name: string);
+        increment: func(delta: s32);
+        get: func() -> s32;
+        name: func() -> string;
+
+        get-all: static func() -> list<tuple<string, s32>>; // static methods are not supported with Scala.js
+    }
+
+    // returning a list of resources previously created is currently not working due to a bug outside of Scala.js support
+    // get-counters: func() -> list<counter>;
+
+    // same as counter.get-all, but exported as a global function outside of the resource
+    get-counters: func() -> list<tuple<string, s32>>;
+}
+
+world example {
+  export api;
+
+  import wasi:clocks/monotonic-clock@0.2.0;
+  import wasi:clocks/wall-clock@0.2.0;
+  import wasi:io/poll@0.2.0;
+  import wasi:io/streams@0.2.0;
+  import wasi:cli/environment@0.2.0;
+  import wasi:http/outgoing-handler@0.2.0;
+  import wasi:logging/logging;
+}

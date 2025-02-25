@@ -1,5 +1,7 @@
 > +clean
-$ exec cargo install golem-scalajs-wit-bindgen
+$ exec cargo install --git https://github.com/vigoo/wit-bindgen-scalajs wit-bindgen-cli
+> +wasmComponentRegenerateSkeleton
+# $ pause
 > +wasmComponent
 $ exists target/dist/main.js
 $ exists target/dist/main.js.map

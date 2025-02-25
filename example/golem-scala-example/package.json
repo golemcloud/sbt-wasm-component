@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "jco componentize --bind-functions-to-interface --expect-top-level-resource-classes --wit wit --out target/dist/main.wasm target/dist/main.js",
+    "build": "jco componentize --bind-functions-to-interface --expect-top-level-resource-classes --wit wit-generated --out target/dist/main.wasm target/dist/main.js",
     "componentize": "npm run build"
   },
   "devDependencies": {

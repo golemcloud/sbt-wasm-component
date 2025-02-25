@@ -54,6 +54,7 @@ jobs:
       - name: Publish
         shell: bash
         run: |
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
           sbt ci-release
         env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
