@@ -4,7 +4,7 @@
     "componentize": "npm run build"
   },
   "devDependencies": {
-    "@golemcloud/componentize-js": "file:/Users/vigoo/projects/ziverge/ComponentizeJS",
-    "@golemcloud/jco": "file:/Users/vigoo/projects/ziverge/jco"
+    "@golemcloud/componentize-js": "0.10.5-golem.4",
+    "@golemcloud/jco": "1.4.4-golem.2"
   }
 }
