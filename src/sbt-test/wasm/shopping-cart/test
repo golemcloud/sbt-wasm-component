@@ -1,5 +1,5 @@
 > +clean
-# $ exec cargo install --git https://github.com/vigoo/wit-bindgen-scalajs --branch scalajs wit-bindgen-cli
+$ exec cargo install --git https://github.com/vigoo/wit-bindgen-scalajs wit-bindgen-cli
 > +wasmComponentRegenerateSkeleton
 # $ pause
 > +wasmComponent
